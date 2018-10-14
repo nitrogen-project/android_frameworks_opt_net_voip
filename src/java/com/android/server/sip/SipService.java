@@ -114,10 +114,12 @@ public final class SipService extends ISipService.Stub {
         mContext = context;
         mConnectivityReceiver = new ConnectivityReceiver();
 
-        mWifiLock = ((WifiManager)
+        if (context.getSystemService(Context.WIFI_SERVICE) != null ) {
+            mWifiLock = ((WifiManager)
                 context.getSystemService(Context.WIFI_SERVICE))
-                .createWifiLock(WifiManager.WIFI_MODE_FULL, TAG);
-        mWifiLock.setReferenceCounted(false);
+                    .createWifiLock(WifiManager.WIFI_MODE_FULL, TAG);
+            mWifiLock.setReferenceCounted(false);
+        }
         mSipOnWifiOnly = SipManager.isSipWifiOnly(context);
 
         mMyWakeLock = new SipWakeLock((PowerManager)
